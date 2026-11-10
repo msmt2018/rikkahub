@@ -1,5 +1,6 @@
 plugins {
-    id("rikkahub.android.library")
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
     alias(libs.plugins.kotlin.serialization)
 }
 
