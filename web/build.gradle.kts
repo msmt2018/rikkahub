@@ -5,7 +5,6 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
 }
 
 val webUiDir = rootProject.layout.projectDirectory.dir("web-ui")
