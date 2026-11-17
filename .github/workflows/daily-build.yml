@@ -9,6 +9,10 @@ on:
   schedule:
     - cron: '0 9,18 * * *'
 
+concurrency:
+  group: rikkahub-library-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
