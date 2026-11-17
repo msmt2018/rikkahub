@@ -20,8 +20,15 @@ android {
     }
 }
 
+fun rikkaHubProjectPath(module: String): String =
+    if (rootProject.findProject(":core:rikkahub:$module") != null) {
+        ":core:rikkahub:$module"
+    } else {
+        ":$module"
+    }
+
 dependencies {
-    implementation(project(":common"))
+    implementation(project(rikkaHubProjectPath("common")))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.okhttp)

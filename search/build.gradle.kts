@@ -32,9 +32,16 @@ configurations.matching { it.name.endsWith("UnitTestRuntimeClasspath") }.configu
     }
 }
 
+fun rikkaHubProjectPath(module: String): String =
+    if (rootProject.findProject(":core:rikkahub:$module") != null) {
+        ":core:rikkahub:$module"
+    } else {
+        ":$module"
+    }
+
 dependencies {
-    implementation(project(":ai"))
-    implementation(project(":common"))
+    implementation(project(rikkaHubProjectPath("ai")))
+    implementation(project(rikkaHubProjectPath("common")))
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)

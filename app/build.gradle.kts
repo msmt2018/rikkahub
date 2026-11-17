@@ -1,21 +1,21 @@
-import com.android.build.api.dsl.Packaging
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.baselineprofile)
 }
 
 android {
     namespace = "me.rerere.rikkahub"
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
     compileSdk {
         version = release(37) {
             minorApiLevel = 2
@@ -23,69 +23,22 @@ android {
     }
 
     defaultConfig {
-        applicationId = "me.rerere.rikkahub"
         minSdk = 26
-        targetSdk = 37
-        versionCode = 193
-        versionName = "3.1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        ndk {
-            abiFilters += listOf("arm64-v8a", "x86_64")
-        }
     }
 
-    splits {
-        abi {
-            // AppBundle tasks usually contain "bundle" in their name
-            //noinspection WrongGradleMethod
-            val isBuildingBundle = gradle.startParameter.taskNames.any { it.lowercase().contains("bundle") }
-            isEnable = !isBuildingBundle
-            reset()
-            include("arm64-v8a", "x86_64")
-            isUniversalApk = true
-        }
-    }
 
-    signingConfigs {
-        create("release") {
-            val localProperties = Properties()
-            val localPropertiesFile = rootProject.file("local.properties")
 
-            if (localPropertiesFile.exists()) {
-                localProperties.load(FileInputStream(localPropertiesFile))
 
-                val storeFilePath = localProperties.getProperty("storeFile")
-                val storePasswordValue = localProperties.getProperty("storePassword")
-                val keyAliasValue = localProperties.getProperty("keyAlias")
-                val keyPasswordValue = localProperties.getProperty("keyPassword")
-
-                if (storeFilePath != null && storePasswordValue != null &&
-                    keyAliasValue != null && keyPasswordValue != null
-                ) {
-                    storeFile = file(storeFilePath)
-                    storePassword = storePasswordValue
-                    keyAlias = keyAliasValue
-                    keyPassword = keyPasswordValue
-                }
-            }
-        }
-    }
 
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
-            optimization {
-                enable = true
-            }
-            buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        }
         debug {
-            applicationIdSuffix = ".debug"
-            buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+            buildConfigField("String", "VERSION_NAME", "\"3.1.0\"")
+            buildConfigField("String", "VERSION_CODE", "\"193\"")
+        }
+        release {
+            buildConfigField("String", "VERSION_NAME", "\"3.1.0\"")
+            buildConfigField("String", "VERSION_CODE", "\"193\"")
         }
     }
     compileOptions {
@@ -99,9 +52,7 @@ android {
     sourceSets {
         getByName("androidTest").assets.srcDirs("$projectDir/schemas")
     }
-    androidResources {
-        generateLocaleConfig = true
-    }
+
     packaging {
         jniLibs {
             useLegacyPackaging = true
@@ -124,11 +75,7 @@ android {
 
 // baselineprofile 插件按 release 复制出 nonMinifiedRelease 时只关掉 isMinifyEnabled，关不掉 optimization，
 // 不手动关的话生成用的包会被 R8 内联、合并类，profile 里记下的是优化后的类和方法
-androidComponents {
-    finalizeDsl { extension ->
-        extension.buildTypes.findByName("nonMinifiedRelease")?.optimization?.enable = false
-    }
-}
+
 
 composeCompiler {
     stabilityConfigurationFiles.add(
@@ -136,10 +83,7 @@ composeCompiler {
     )
 }
 
-tasks.register("buildAll") {
-    dependsOn("assembleRelease", "bundleRelease")
-    description = "Build both APK and AAB"
-}
+
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
@@ -158,6 +102,13 @@ configurations.matching { it.name.endsWith("UnitTestRuntimeClasspath") }.configu
             .using(module("io.github.dokar3:quickjs-kt-jvm:${libs.versions.quickjs.get()}"))
     }
 }
+
+fun rikkaHubProjectPath(module: String): String =
+    if (rootProject.findProject(":core:rikkahub:$module") != null) {
+        ":core:rikkahub:$module"
+    } else {
+        ":$module"
+    }
 
 dependencies {
     implementation(libs.quickjs)
@@ -260,7 +211,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
-    baselineProfile(project(":app:baselineprofile"))
     ksp(libs.androidx.room.compiler)
 
     // Paging3
@@ -303,19 +253,19 @@ dependencies {
     implementation(libs.sqlite.android)
 
     // modules
-    implementation(project(":ai"))
-    implementation(project(":web"))
-    implementation(project(":document"))
-    implementation(project(":highlight"))
-    implementation(project(":search"))
-    implementation(project(":speech"))
-    implementation(project(":mediagen"))
-    implementation(project(":common"))
-    implementation(project(":material3"))
-    implementation(project(":ui"))
-    implementation(project(":workspace"))
-    implementation(project(":terminal"))
-    implementation(project(":oauth"))
+    implementation(project(rikkaHubProjectPath("ai")))
+    implementation(project(rikkaHubProjectPath("web")))
+    implementation(project(rikkaHubProjectPath("document")))
+    implementation(project(rikkaHubProjectPath("highlight")))
+    implementation(project(rikkaHubProjectPath("search")))
+    implementation(project(rikkaHubProjectPath("speech")))
+    implementation(project(rikkaHubProjectPath("mediagen")))
+    implementation(project(rikkaHubProjectPath("common")))
+    implementation(project(rikkaHubProjectPath("material3")))
+    implementation(project(rikkaHubProjectPath("ui")))
+    implementation(project(rikkaHubProjectPath("workspace")))
+    implementation(project(rikkaHubProjectPath("terminal")))
+    implementation(project(rikkaHubProjectPath("oauth")))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(kotlin("reflect"))
 
