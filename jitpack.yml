@@ -1,2 +1,9 @@
 jdk:
   - openjdk17
+before_install:
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y nodejs
+  - npm install -g pnpm@11
+install:
+  - cd web-ui && pnpm install --frozen-lockfile && cd ..
+  - ./gradlew clean build publishToMavenLocal -x test
