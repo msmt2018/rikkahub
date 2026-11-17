@@ -1,6 +1,4 @@
 pluginManagement {
-    includeBuild("build-logic")
-
     repositories {
         google {
             content {
@@ -43,6 +41,5 @@ include(":material3")
 include(":ui")
 include(":workspace")
 include(":terminal")
-include(":app:baselineprofile")
 include(":mediagen")
 include(":oauth")
