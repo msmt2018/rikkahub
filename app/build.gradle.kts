@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-val rikkaHubVersionName = providers.gradleProperty("rikkahubVersion").orElse("3.1.0").get()
+val rikkaHubVersionName = System.getenv("VERSION") ?: providers.gradleProperty("rikkahubVersion").orElse("3.1.0").get()
 
 android {
     namespace = "me.rerere.rikkahub"
@@ -27,11 +27,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "VERSION_NAME", "\"3.1.0\"")
+            buildConfigField("String", "VERSION_NAME", "\\"$rikkaHubVersionName\\"")
             buildConfigField("String", "VERSION_CODE", "\"193\"")
         }
         release {
-            buildConfigField("String", "VERSION_NAME", "\"3.1.0\"")
+            buildConfigField("String", "VERSION_NAME", "\\"$rikkaHubVersionName\\"")
             buildConfigField("String", "VERSION_CODE", "\"193\"")
         }
     }

@@ -15,7 +15,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         pluginManager.apply("maven-publish")
 
         group = "com.github.msmt2018.rikkahub"
-        version = providers.gradleProperty("rikkahubVersion").orElse("3.1.0").get()
+        version = System.getenv("VERSION") ?: providers.gradleProperty("rikkahubVersion").orElse("3.1.0").get()
 
         extensions.configure<LibraryExtension> {
             compileSdk = 37
