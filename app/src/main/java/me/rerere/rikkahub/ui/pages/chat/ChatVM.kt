@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,6 +28,7 @@ import me.rerere.ai.ui.UIMessage
 import me.rerere.ai.ui.UIMessagePart
 import me.rerere.ai.ui.isEmptyInputMessage
 import me.rerere.rikkahub.BuildConfig
+import me.rerere.rikkahub.analytics.RikkaHubAnalytics
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.datastore.Settings
 import me.rerere.rikkahub.data.datastore.SettingsStore
@@ -62,7 +62,7 @@ class ChatVM(
     private val settingsStore: SettingsStore,
     private val chatService: ChatService,
     val updateChecker: UpdateChecker,
-    private val analytics: FirebaseAnalytics,
+    private val analytics: RikkaHubAnalytics,
     private val filesManager: FilesManager,
     private val favoriteRepository: FavoriteRepository,
     private val backgroundShellManager: BackgroundShellManager,
@@ -223,7 +223,7 @@ class ChatVM(
     // Update checker
     val updateState = settingsStore.settingsFlow
         .map { settings ->
-            !BuildConfig.IS_PLAY_STORE &&
+            BuildConfig.ENABLE_UPDATE_CHECK &&
                 !settings.init &&
                 settings.displaySetting.updateCheckDisabledUntilEpochMillis <= System.currentTimeMillis()
         }
@@ -245,14 +245,14 @@ class ChatVM(
      */
     fun handleMessageSend(content: List<UIMessagePart>,answer: Boolean = true) {
         if (content.isEmptyInputMessage()) return
-        analytics.logEvent("ai_send_message", null)
+        analytics.logEvent("ai_send_message")
 
         chatService.sendMessage(_conversationId, content, answer)
     }
 
     fun handleMessageEdit(parts: List<UIMessagePart>, messageId: Uuid) {
         if (parts.isEmptyInputMessage()) return
-        analytics.logEvent("ai_edit_message", null)
+        analytics.logEvent("ai_edit_message")
 
         viewModelScope.launch {
             chatService.editMessage(_conversationId, messageId, parts)
@@ -286,7 +286,7 @@ class ChatVM(
     }
 
     fun regenerateAtMessage(message: UIMessage) {
-        analytics.logEvent("ai_regenerate_at_message", null)
+        analytics.logEvent("ai_regenerate_at_message")
         chatService.regenerateAtMessage(_conversationId, message.id)
     }
 
@@ -295,7 +295,7 @@ class ChatVM(
         approved: Boolean,
         reason: String = ""
     ) {
-        analytics.logEvent("ai_tool_approval", null)
+        analytics.logEvent("ai_tool_approval")
         chatService.handleToolApproval(_conversationId, toolCallId, approved, reason)
     }
 
@@ -303,7 +303,7 @@ class ChatVM(
         toolCallId: String,
         answer: String,
     ) {
-        analytics.logEvent("ai_tool_answer", null)
+        analytics.logEvent("ai_tool_answer")
         chatService.handleToolApproval(_conversationId, toolCallId, approved = true, answer = answer)
     }
 

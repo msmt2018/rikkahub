@@ -1,10 +1,9 @@
 package me.rerere.rikkahub.di
 
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.analytics
-import com.google.firebase.crashlytics.crashlytics
 import kotlinx.serialization.json.Json
 import me.rerere.rikkahub.AppScope
+import me.rerere.rikkahub.analytics.NoOpRikkaHubAnalytics
+import me.rerere.rikkahub.analytics.RikkaHubAnalytics
 import me.rerere.rikkahub.data.ai.ChatRequestFactory
 import me.rerere.rikkahub.data.ai.tools.ChatToolFactory
 import me.rerere.rikkahub.data.ai.tools.local.LocalTools
@@ -60,13 +59,7 @@ val appModule = module {
         TTSManager(get())
     }
 
-    single {
-        Firebase.crashlytics
-    }
-
-    single {
-        Firebase.analytics
-    }
+    single<RikkaHubAnalytics> { NoOpRikkaHubAnalytics }
 
     single {
         SoundEffectPlayer(get())

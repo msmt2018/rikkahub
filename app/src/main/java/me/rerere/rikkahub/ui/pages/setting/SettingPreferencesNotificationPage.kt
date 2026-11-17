@@ -111,7 +111,7 @@ fun SettingPreferencesNotificationPage(vm: SettingVM = koinViewModel()) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Play 版由商店负责更新，不提供更新提醒
-            if (!BuildConfig.IS_PLAY_STORE) {
+            if (BuildConfig.ENABLE_UPDATE_CHECK) {
                 item {
                     CardGroup {
                         item(
