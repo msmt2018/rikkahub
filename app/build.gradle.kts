@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -28,11 +27,6 @@ android {
         buildConfigField("String", "VERSION_CODE", "\"197\"")
         buildConfigField("boolean", "IS_PLAY_STORE", "false")
         buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "false")
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -76,12 +70,6 @@ composeCompiler {
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
 }
 
 configurations.matching { it.name.endsWith("RuntimeClasspath") }.configureEach {

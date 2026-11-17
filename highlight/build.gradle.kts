@@ -7,7 +7,7 @@ android {
     namespace = "me.rerere.highlight"
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
     }
 }
 
