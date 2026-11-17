@@ -100,6 +100,14 @@ subprojects {
         }
     }
 
+    plugins.withId("org.jetbrains.kotlin.plugin.compose") {
+        extensions.configure<LibraryExtension> {
+            buildFeatures {
+                compose = true
+            }
+        }
+    }
+
     plugins.withId("org.jetbrains.kotlin.android") {
         tasks.withType<KotlinCompile>().configureEach {
             compilerOptions.jvmTarget.set(JvmTarget.JVM_17)

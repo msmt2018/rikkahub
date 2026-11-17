@@ -242,6 +242,7 @@ dependencies {
     implementation(project(rikkaHubProjectPath("ai")))
     implementation(project(rikkaHubProjectPath("web")))
     implementation(project(rikkaHubProjectPath("document")))
+    implementation(project(rikkaHubProjectPath("highlight")))
     implementation(project(rikkaHubProjectPath("search")))
     implementation(project(rikkaHubProjectPath("speech")))
     implementation(project(rikkaHubProjectPath("mediagen")))
