@@ -59,6 +59,7 @@ jobs:
             :ai:publishReleasePublicationToMavenLocal \
             :common:publishReleasePublicationToMavenLocal \
             :document:publishReleasePublicationToMavenLocal \
+            :highlight:publishReleasePublicationToMavenLocal \
             :search:publishReleasePublicationToMavenLocal \
             :speech:publishReleasePublicationToMavenLocal \
             :web:publishReleasePublicationToMavenLocal \
