@@ -1,9 +1,11 @@
 jdk:
   - openjdk17
+
 before_install:
-  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-  - apt-get install -y nodejs
-  - npm install -g pnpm@11
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+  - curl -fsSL https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz -o /tmp/node.tar.xz
+  - tar -xJf /tmp/node.tar.xz -C /tmp
+
 install:
-  - cd web-ui && pnpm install --frozen-lockfile && cd ..
-  - ./gradlew clean build publishToMavenLocal -x test
+  - export PATH=/tmp/node-v22.14.0-linux-x64/bin:$PATH && npm install --global pnpm@11 && cd web-ui && pnpm install --frozen-lockfile && cd .. && ./gradlew :app:assembleRelease :ai:publishReleasePublicationToMavenLocal :common:publishReleasePublicationToMavenLocal :document:publishReleasePublicationToMavenLocal :search:publishReleasePublicationToMavenLocal :speech:publishReleasePublicationToMavenLocal :web:publishReleasePublicationToMavenLocal :material3:publishReleasePublicationToMavenLocal :ui:publishReleasePublicationToMavenLocal :workspace:publishReleasePublicationToMavenLocal :terminal:publishReleasePublicationToMavenLocal :mediagen:publishReleasePublicationToMavenLocal :oauth:publishReleasePublicationToMavenLocal -x test

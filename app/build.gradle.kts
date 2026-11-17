@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val rikkaHubVersionName = providers.gradleProperty("rikkahubVersion").orElse("3.3.0").get()
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -19,6 +21,7 @@ android {
 
     defaultConfig {
         minSdk = 26
+        consumerProguardFiles("src/main/keepRules/rikkahub.keep")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters += listOf("arm64-v8a", "x86_64")

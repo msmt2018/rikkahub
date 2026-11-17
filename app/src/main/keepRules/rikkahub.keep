@@ -1,6 +1,3 @@
-# Release builds may shrink and optimize code, but must not rename symbols.
--dontobfuscate
-
 # kotlinx.serialization looks up serializers of @Serializable classes reflectively at runtime.
 -keep @kotlinx.serialization.Serializable class * { *; }
 
