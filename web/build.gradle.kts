@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-val webUiDir = rootProject.layout.projectDirectory.dir("web-ui")
+val webUiDir = project.layout.projectDirectory.dir("../web-ui")
 val webStaticResourcesDir = layout.projectDirectory.dir("src/main/resources/static")
 
 val buildWebUi = tasks.register<Exec>("buildWebUi") {

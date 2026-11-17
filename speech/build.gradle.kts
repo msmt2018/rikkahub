@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
+    implementation(project(if (rootProject.findProject(":core:rikkahub:common") != null) ":core:rikkahub:common" else ":common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.okhttp)

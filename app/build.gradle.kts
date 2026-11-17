@@ -94,6 +94,11 @@ configurations.matching { it.name.endsWith("UnitTestRuntimeClasspath") }.configu
     }
 }
 
+val rikkaHubProjectPath: (String) -> String = { module ->
+    val nestedPath = ":core:rikkahub:" + module
+    if (rootProject.findProject(nestedPath) != null) nestedPath else ":" + module
+}
+
 dependencies {
     implementation(libs.quickjs)
     implementation(libs.androidx.core.ktx)
@@ -232,18 +237,18 @@ dependencies {
     implementation(libs.sqlite.android)
 
     // modules
-    implementation(project(":ai"))
-    implementation(project(":web"))
-    implementation(project(":document"))
-    implementation(project(":search"))
-    implementation(project(":speech"))
-    implementation(project(":mediagen"))
-    implementation(project(":common"))
-    implementation(project(":material3"))
-    implementation(project(":ui"))
-    implementation(project(":workspace"))
-    implementation(project(":terminal"))
-    implementation(project(":oauth"))
+    implementation(project(rikkaHubProjectPath("ai")))
+    implementation(project(rikkaHubProjectPath("web")))
+    implementation(project(rikkaHubProjectPath("document")))
+    implementation(project(rikkaHubProjectPath("search")))
+    implementation(project(rikkaHubProjectPath("speech")))
+    implementation(project(rikkaHubProjectPath("mediagen")))
+    implementation(project(rikkaHubProjectPath("common")))
+    implementation(project(rikkaHubProjectPath("material3")))
+    implementation(project(rikkaHubProjectPath("ui")))
+    implementation(project(rikkaHubProjectPath("workspace")))
+    implementation(project(rikkaHubProjectPath("terminal")))
+    implementation(project(rikkaHubProjectPath("oauth")))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 
     // Leak Canary

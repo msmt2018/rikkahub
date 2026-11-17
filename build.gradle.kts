@@ -59,6 +59,9 @@ if (version.toString() == "unspecified") {
 }
 
 subprojects {
+    group = rootProject.group
+    version = rootProject.version
+
     plugins.withId("com.android.library") {
         extensions.configure<LibraryExtension> {
             compileSdk {

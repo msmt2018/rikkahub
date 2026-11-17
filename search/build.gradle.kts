@@ -35,8 +35,8 @@ configurations.matching { it.name.endsWith("UnitTestRuntimeClasspath") }.configu
 }
 
 dependencies {
-    implementation(project(":ai"))
-    implementation(project(":common"))
+    implementation(project(if (rootProject.findProject(":core:rikkahub:ai") != null) ":core:rikkahub:ai" else ":ai"))
+    implementation(project(if (rootProject.findProject(":core:rikkahub:common") != null) ":core:rikkahub:common" else ":common"))
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)
