@@ -53,9 +53,7 @@ spotless {
 // Standalone defaults. When included by ZeroStudio, its root AndroidIDEPlugin
 // supplies the Android SDK/JVM configuration instead.
 group = "com.github.msmt2018.rikkahub"
-if (version.toString() == "unspecified") {
-    version = "0.0.0-SNAPSHOT"
-}
+version = System.getenv("VERSION") ?: providers.gradleProperty("VERSION").orNull ?: "0.0.0-SNAPSHOT"
 
 subprojects {
     group = rootProject.group
