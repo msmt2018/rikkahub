@@ -15,6 +15,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -78,3 +79,12 @@ jobs:
           path: |
             **/build/outputs/aar/*.aar
             ~/.m2/repository/com/github/msmt2018/rikkahub/
+
+      - name: Trigger and verify JitPack branch snapshot
+        env:
+          JITPACK_POM_URL: https://jitpack.io/com/github/msmt2018/rikkahub/ai/ZeroStudio-SNAPSHOT/ai-ZeroStudio-SNAPSHOT.pom
+        run: |
+          curl --fail --show-error --location \
+            --retry 30 --retry-delay 20 --retry-all-errors --retry-max-time 900 \
+            "$JITPACK_POM_URL" --output "$RUNNER_TEMP/rikkahub-ai.pom"
+          grep -q '<artifactId>ai</artifactId>' "$RUNNER_TEMP/rikkahub-ai.pom"
