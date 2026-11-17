@@ -41,7 +41,7 @@ class ShortcutHandlerActivity : ComponentActivity() {
 
     private fun launchCamera() {
         val imageFile = File(cacheDir, "shortcut_camera_image.jpg")
-        photoURI = FileProvider.getUriForFile(this, "\${packageName}.fileprovider", imageFile)
+        photoURI = FileProvider.getUriForFile(this, packageName + ".fileprovider", imageFile)
         photoURI?.let {
             takePictureLauncher.launch(it)
         } ?: finish()
