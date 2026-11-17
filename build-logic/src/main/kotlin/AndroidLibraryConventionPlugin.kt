@@ -42,16 +42,17 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         }
 
         afterEvaluate {
-            extensions.configure<PublishingExtension> {
-                publications {
-                    register<MavenPublication>("release") {
-                        from(components["release"])
-                        groupId = "com.github.msmt2018.rikkahub"
-                        artifactId = project.name
-                        version = project.version.toString()
-                    }
-                }
-            }
+            val releaseComponent = components.findByName("release")
+                ?: error("Android release component is missing for $path")
+            val publishingExtension = extensions.getByType(PublishingExtension::class.java)
+            val releasePublication = publishingExtension.publications.create(
+                "release",
+                MavenPublication::class.java
+            )
+            releasePublication.from(releaseComponent)
+            releasePublication.groupId = "com.github.msmt2018.rikkahub"
+            releasePublication.artifactId = name
+            releasePublication.version = version.toString()
         }
     }
 }
