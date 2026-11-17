@@ -27,11 +27,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "VERSION_NAME", "\\"$rikkaHubVersionName\\"")
+            buildConfigField("String", "VERSION_NAME", "\"$rikkaHubVersionName\"")
             buildConfigField("String", "VERSION_CODE", "\"193\"")
         }
         release {
-            buildConfigField("String", "VERSION_NAME", "\\"$rikkaHubVersionName\\"")
+            buildConfigField("String", "VERSION_NAME", "\"$rikkaHubVersionName\"")
             buildConfigField("String", "VERSION_CODE", "\"193\"")
         }
     }
