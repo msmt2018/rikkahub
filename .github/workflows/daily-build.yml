@@ -84,7 +84,16 @@ jobs:
         env:
           JITPACK_POM_URL: https://jitpack.io/com/github/msmt2018/rikkahub/ai/ZeroStudio-SNAPSHOT/ai-ZeroStudio-SNAPSHOT.pom
         run: |
-          curl --fail --show-error --location \
-            --retry 30 --retry-delay 20 --retry-all-errors --retry-max-time 900 \
-            "$JITPACK_POM_URL" --output "$RUNNER_TEMP/rikkahub-ai.pom"
-          grep -q '<artifactId>ai</artifactId>' "$RUNNER_TEMP/rikkahub-ai.pom"
+          POM="$RUNNER_TEMP/rikkahub-ai.pom"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error --location --max-time 20 \
+              "$JITPACK_POM_URL" --output "$POM" \
+              && grep -q '<artifactId>ai</artifactId>' "$POM"; then
+              echo "JitPack published the ai module for ZeroStudio-SNAPSHOT."
+              exit 0
+            fi
+            echo "JitPack build is not ready (attempt $attempt/30)."
+            sleep 20
+          done
+          cat "$POM" || true
+          exit 1
