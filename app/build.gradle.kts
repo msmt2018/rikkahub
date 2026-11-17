@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val rikkaHubVersionName = providers.gradleProperty("rikkahubVersion").orElse("3.1.0").get()
+
 android {
     namespace = "me.rerere.rikkahub"
 
@@ -16,11 +18,7 @@ android {
             withSourcesJar()
         }
     }
-    compileSdk {
-        version = release(37) {
-            minorApiLevel = 2
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 26
