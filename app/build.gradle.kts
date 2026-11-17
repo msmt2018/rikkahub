@@ -1,8 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val rikkaHubVersionName = providers.gradleProperty("rikkahubVersion").orElse("3.3.0").get()
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -10,6 +8,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.devtools.ksp")
 }
+
+val rikkaHubVersionName = providers.gradleProperty("rikkahubVersion").orElse("3.3.0").get()
 
 android {
     namespace = "me.rerere.rikkahub"
@@ -21,12 +21,11 @@ android {
 
     defaultConfig {
         minSdk = 26
-        consumerProguardFiles("src/main/keepRules/rikkahub.keep")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters += listOf("arm64-v8a", "x86_64")
         }
-        buildConfigField("String", "VERSION_NAME", "\"3.3.0\"")
+        buildConfigField("String", "VERSION_NAME", "\"$rikkaHubVersionName\"")
         buildConfigField("String", "VERSION_CODE", "\"197\"")
         buildConfigField("boolean", "IS_PLAY_STORE", "false")
         buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "false")
