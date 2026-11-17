@@ -11,11 +11,7 @@ val rikkaHubVersionName = providers.gradleProperty("rikkahubVersion").orElse("3.
 
 android {
     namespace = "me.rerere.rikkahub"
-    compileSdk {
-        version = release(37) {
-            minorApiLevel = 2
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 26
