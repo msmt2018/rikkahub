@@ -84,6 +84,14 @@ jobs:
             **/build/outputs/aar/*.aar
             ~/.m2/repository/com/github/msmt2018/rikkahub/
 
+      - name: Upload standalone RikkaHub app source for ZeroStudio
+        uses: actions/upload-artifact@v4
+        with:
+          name: rikkahub-app-source
+          if-no-files-found: error
+          path: app/
+          compression-level: 6
+
       - name: Trigger and verify JitPack branch snapshot
         env:
           JITPACK_POM_URL: https://jitpack.io/com/github/msmt2018/rikkahub/ai/ZeroStudio-SNAPSHOT/ai-ZeroStudio-SNAPSHOT.pom
@@ -100,4 +108,10 @@ jobs:
             sleep 20
           done
           cat "$POM" || true
+          echo "=== JitPack repository build log ==="
+          curl --silent --show-error --location --max-time 30 \
+            "https://jitpack.io/com/github/msmt2018/rikkahub/ZeroStudio-SNAPSHOT/build.log" || true
+          echo "=== JitPack build API status ==="
+          curl --silent --show-error --location --max-time 30 \
+            "https://jitpack.io/api/builds/com.github.msmt2018.rikkahub/rikkahub/ZeroStudio-SNAPSHOT" || true
           exit 1
